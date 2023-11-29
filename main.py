@@ -1,5 +1,5 @@
 HISTORY_FILE = 'history.csv'
-STATS_FILE = 'stats.csv'
+STATS_FILE = 'stats.json'
 COMBO_FILE = 'combo.csv'
 PLAY_FILE = 'play.csv'
 
