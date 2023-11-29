@@ -29,11 +29,16 @@ def verify(combo):
     # init matches counter from 1 to 6
     matches = {i: 0 for i in range(1, 7)}
 
+    # split combo and convert in numbers
+    combo = combo.split(',')
+    combo = [int(number) for number in combo]
+
     for play in plays:
         this = 0
 
         # count the number of matches
         for i, number in enumerate(play.split(',')):
+            print(number, combo)
             if number in combo:
                 this += 1
 
