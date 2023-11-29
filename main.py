@@ -47,8 +47,14 @@ def main():
     print(f'>   winning combination: {win_combo}')
 
     # verify if the winning combination has been played
-    print('>>  verifying if it has been played')
     verification = verify(win_combo)
-    print(f'>   verification: {verification}')
+    
+    # print the matches else no matches
+    if verification:
+        print('>>  matches:')
+        for k, v in verification.items():
+            print(f'>   {v} matches for {k}')
+    else:
+        print('>>  no matches')
 
 main()
