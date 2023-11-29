@@ -1,3 +1,5 @@
+import json
+
 HISTORY_FILE = 'history.csv'
 STATS_FILE = 'stats.json'
 COMBO_FILE = 'combo.csv'
@@ -56,5 +58,10 @@ def main():
             print(f'>   {v} matches for {k}')
     else:
         print('>>  no matches')
+    
+    # get the stats from the file
+    with open(STATS_FILE, 'r') as f:
+        stats = json.load(f)
+        print(f'\n>>  stats: {stats}')
 
 main()
