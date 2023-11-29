@@ -28,14 +28,13 @@ def verify(combo):
     matches = {i: 0 for i in range(1, 7)}
 
     for play in plays:
-        print(f'\n>   play: {play}')
         this = 0
 
         # count the number of matches
         for i, number in enumerate(play.split(',')):
             if number in combo:
                 this += 1
-        
+
         # increment the counter
         if this > 0:
             matches[this] += 1
