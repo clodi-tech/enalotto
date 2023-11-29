@@ -23,7 +23,7 @@ def get_winning():
 def verify(combo):
     with open(PLAY_FILE, 'r') as f:
         plays = f.readlines()
-    
+
     # init matches counter from 1 to 6
     matches = {i: 0 for i in range(1, 7)}
 
