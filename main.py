@@ -75,24 +75,23 @@ def update_stats(combo):
         stats['count'][number] += 1
         stats['delay'][number] = 0
 
-    # update count stats
-    stats['count']['min'] = min(stats['count'].values())
-    stats['count']['max'] = max(stats['count'].values())
-    stats['count']['avg'] = statistics.mean(stats['count'].values())
-    stats['count']['median'] = statistics.median(stats['count'].values())
-    stats['count']['mode'] = statistics.mode(stats['count'].values())
-
-    # update delay stats
-    stats['delay']['min'] = min(stats['delay'].values())
-    stats['delay']['max'] = max(stats['delay'].values())
-    stats['delay']['avg'] = statistics.mean(stats['delay'].values())
-    stats['delay']['median'] = statistics.median(stats['delay'].values())
-    stats['delay']['mode'] = statistics.mode(stats['delay'].values())
+    # update count and delay stats
+    for key in ['count', 'delay']:
+        stats[key].update(calculate_stats(stats[key]))
 
     print('\n>>  stats:', json.dumps(stats, indent=4))
 
     with open(STATS_FILE, 'w') as f:
         json.dump(stats, f)
+
+def calculate_stats(data):
+    return {
+        'min': min(data.values()),
+        'max': max(data.values()),
+        'avg': statistics.mean(data.values()),
+        'median': statistics.median(data.values()),
+        'mode': statistics.mode(data.values())
+    }
 
 def main():
     # get the last winning combination
