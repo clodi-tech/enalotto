@@ -10,16 +10,15 @@ def get_winning():
     # ask the user to enter the winning combination
     combo = input('>>> enter the winning combination: ')
 
-    # if the user press enter
-    if combo == '':
-        # get the last combination from the history
-        with open(HISTORY_FILE, 'r') as f:
-            combo = f.readlines()[-1]
-
-    else:
-        # else write the combination to the history
-        with open(HISTORY_FILE, 'a') as f:
+    # open the history file
+    with open(HISTORY_FILE, 'a+') as f:
+        # write the combination to the history
+        if combo:
             f.write(f'{combo}\n')
+        # get the last combination from the history
+        else:
+            f.seek(0)
+            combo = f.readlines()[-1]
 
     return combo
 
