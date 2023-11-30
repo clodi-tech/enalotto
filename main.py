@@ -47,23 +47,16 @@ def verify(combo):
     return {k: v for k, v in matches.items() if v > 0}
 
 def reset_stats(max):
-    stats = {}
-
-    # build layers
-    stats['count'] = {}
-    stats['delay'] = {}
-
-    # init the stats
-    stats['max'] = {'count': 0, 'delay': 0}
-    stats['min'] = {'count': 0, 'delay': 0}
-    stats['avg'] = {'count': 0, 'delay': 0}
-    stats['median'] = {'count': 0, 'delay': 0}
-    stats['mode'] = {'count': 0, 'delay': 0}
-
-    # init to 0 for all numbers
-    for i in range(1, max + 1):
-        stats['count'][i] = 0
-        stats['delay'][i] = 0
+    # init stats
+    stats = {
+        'count': {i: 0 for i in range(1, max + 1)},
+        'delay': {i: 0 for i in range(1, max + 1)},
+        'max': {'count': 0, 'delay': 0},
+        'min': {'count': 0, 'delay': 0},
+        'avg': {'count': 0, 'delay': 0},
+        'median': {'count': 0, 'delay': 0},
+        'mode': {'count': 0, 'delay': 0},
+    }
 
     # write the stats to the file
     with open(STATS_FILE, 'w') as f:
