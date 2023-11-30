@@ -50,16 +50,15 @@ def update_stats(combo):
     with open(STATS_FILE, 'r') as f:
         stats = json.load(f)
 
-    # if the file is empty
-    if not stats:
-        # init the stats
-        stats = {i: 0 for i in range(1, 10)}
-
-    print(f'stats: {stats}')
+    stats = {int(k): v for k, v in stats.items()}
 
     #increment the count for each number
     for number in combo:
         stats[number] += 1
+
+    # print the stats in a readable format
+    print('\n>>  stats:')
+    print(json.dumps(stats, indent=4))
 
     # write the stats to the file
     with open(STATS_FILE, 'w') as f:
