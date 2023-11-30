@@ -50,8 +50,15 @@ def reset_stats(max):
     stats = {}
 
     # build layers
-    stats['count'] = {'max': 0, 'min': 0, 'avg': 0, 'median': 0, 'mode': 0}
-    stats['delay'] = {'max': 0, 'min': 0, 'avg': 0, 'median': 0, 'mode': 0}
+    stats['count'] = {}
+    stats['delay'] = {}
+
+    # init the stats
+    stats['max'] = {'count': 0, 'delay': 0}
+    stats['min'] = {'count': 0, 'delay': 0}
+    stats['avg'] = {'count': 0, 'delay': 0}
+    stats['median'] = {'count': 0, 'delay': 0}
+    stats['mode'] = {'count': 0, 'delay': 0}
 
     # init to 0 for all numbers
     for i in range(1, max + 1):
