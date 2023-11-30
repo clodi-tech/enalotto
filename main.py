@@ -74,6 +74,14 @@ def update_stats(combo):
         stats['count'][number] += 1
         stats['delay'][number] = 0
 
+        # update the max delay
+        if stats['delay'][number] > stats['delay']['max']:
+            stats['delay']['max'] = stats['delay'][number]
+
+        # update the max count
+        if stats['count'][number] > stats['count']['max']:
+            stats['count']['max'] = stats['count'][number]
+
     print('\n>>  stats:', json.dumps(stats, indent=4))
 
     with open(STATS_FILE, 'w') as f:
