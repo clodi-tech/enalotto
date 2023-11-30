@@ -48,12 +48,14 @@ def verify(combo):
 def reset_stats(max):
     stats = {}
 
-    # build count layer
+    # build layers
     stats['count'] = {}
+    stats['delay'] = {}
 
     # init to 0 for all numbers
     for i in range(1, max + 1):
         stats['count'][i] = 0
+        stats['delay'][i] = 0
 
     # write the stats to the file
     with open(STATS_FILE, 'w') as f:
@@ -99,4 +101,8 @@ def main():
     # update statistics
     update_stats(win_combo)
 
+# run main function
 main()
+
+# reset stats for x numbers
+# reset_stats(10)
