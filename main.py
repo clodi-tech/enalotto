@@ -1,4 +1,5 @@
 import json
+import statistics
 
 HISTORY_FILE = 'history.csv'
 STATS_FILE = 'stats.json'
@@ -74,25 +75,19 @@ def update_stats(combo):
         stats['count'][number] += 1
         stats['delay'][number] = 0
 
-        # update the max delay
-        if stats['delay'][number] > stats['delay']['max']:
-            stats['delay']['max'] = stats['delay'][number]
-
-        # update the max count
-        if stats['count'][number] > stats['count']['max']:
-            stats['count']['max'] = stats['count'][number]
-
     # update count stats
     stats['count']['min'] = min(stats['count'].values())
-    stats['count']['avg'] = sum(stats['count'].values()) / len(stats['count'])
-    stats['count']['median'] = sorted(stats['count'].values())[len(stats['count'])//2]
-    stats['count']['mode'] = max(stats['count'].values())
+    stats['count']['max'] = max(stats['count'].values())
+    stats['count']['avg'] = statistics.mean(stats['count'].values())
+    stats['count']['median'] = statistics.median(stats['count'].values())
+    stats['count']['mode'] = statistics.mode(stats['count'].values())
 
     # update delay stats
     stats['delay']['min'] = min(stats['delay'].values())
-    stats['delay']['avg'] = sum(stats['delay'].values()) / len(stats['delay'])
-    stats['delay']['median'] = sorted(stats['delay'].values())[len(stats['delay'])//2]
-    stats['delay']['mode'] = max(stats['delay'].values())
+    stats['delay']['max'] = max(stats['delay'].values())
+    stats['delay']['avg'] = statistics.mean(stats['delay'].values())
+    stats['delay']['median'] = statistics.median(stats['delay'].values())
+    stats['delay']['mode'] = statistics.mode(stats['delay'].values())
 
     print('\n>>  stats:', json.dumps(stats, indent=4))
 
