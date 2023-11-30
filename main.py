@@ -46,7 +46,6 @@ def verify(combo):
     return {k: v for k, v in matches.items() if v > 0}
 
 def update_stats(combo):
-
     # get the stats from the file
     with open(STATS_FILE, 'r') as f:
         stats = json.load(f)
