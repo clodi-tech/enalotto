@@ -51,7 +51,7 @@ def update_stats(combo):
         stats = json.load(f)
 
     # convert the keys to int
-    stats['count'] = {int(k): v for k, v in stats.items()}
+    stats['count'] = {int(k): v for k, v in stats['count'].items()}
 
     #increment the count for each number
     for number in combo:
