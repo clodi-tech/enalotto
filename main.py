@@ -50,6 +50,7 @@ def update_stats(combo):
     with open(STATS_FILE, 'r') as f:
         stats = json.load(f)
 
+    # convert the keys to int
     stats = {int(k): v for k, v in stats.items()}
 
     #increment the count for each number
