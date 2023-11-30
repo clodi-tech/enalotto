@@ -111,7 +111,7 @@ def main():
     update_stats(win_combo)
 
 # reset stats for x numbers
-reset_stats(10)
+# reset_stats(10)
 
 # run main function
 main()
