@@ -62,32 +62,20 @@ def reset_stats(max):
         json.dump(stats, f)
 
 def update_stats(combo):
-    # get the stats from the file
     with open(STATS_FILE, 'r') as f:
         stats = json.load(f)
 
-    # convert the keys to int
-    stats['count'] = {int(k): v for k, v in stats['count'].items()}
-    stats['delay'] = {int(k): v for k, v in stats['delay'].items()}
+    # convert keys to int and increase delay
+    for key in ['count', 'delay']:
+        stats[key] = {int(k): (v+1 if key == 'delay' and int(k) not in combo else v) for k, v in stats[key].items()}
 
-    # increment the count for each number
+    # increment the count and reset the delay
     for number in combo:
-        # update the count
         stats['count'][number] += 1
-
-        # reset the delay
         stats['delay'][number] = 0
 
-    # increment the delay for each number not in the combo
-    for number in stats['delay']:
-        if number not in combo:
-            stats['delay'][number] += 1
+    print('\n>>  stats:', json.dumps(stats, indent=4))
 
-    # print the stats in a readable format
-    print('\n>>  stats:')
-    print(json.dumps(stats, indent=4))
-
-    # write the stats to the file
     with open(STATS_FILE, 'w') as f:
         json.dump(stats, f)
 
