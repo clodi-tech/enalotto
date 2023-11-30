@@ -29,9 +29,6 @@ def verify(combo):
     # init matches counter from 1 to 6
     matches = {i: 0 for i in range(1, 7)}
 
-    # convert combo to numbers
-    combo = [int(number) for number in combo.split(',')]
-
     for play in plays:
         # convert play to numbers
         play = [int(number) for number in play.split(',')]
@@ -48,9 +45,17 @@ def verify(combo):
 
     return {k: v for k, v in matches.items() if v > 0}
 
+def update_stats(combo):
+
+    # get the stats from the file
+    with open(STATS_FILE, 'r') as f:
+        stats = json.load(f)
+    print(stats)
+
 def main():
     # get the last winning combination
     win_combo = get_winning()
+    win_combo = [int(number) for number in win_combo.split(',')]
     print(f'>   winning combination: {win_combo}')
 
     # verify if the winning combination has been played
@@ -58,15 +63,13 @@ def main():
 
     # print the matches else no matches
     if verification:
-        print('>>  matches:')
+        print('\n>>  matches:')
         for k, v in verification.items():
             print(f'>   {v} matches for {k}')
     else:
-        print('>>  no matches')
+        print('\n>>  no matches')
 
-    # get the stats from the file
-    with open(STATS_FILE, 'r') as f:
-        stats = json.load(f)
-        print(f'\n>>  stats: {stats}')
+    # update statistics
+    update_stats(win_combo)
 
 main()
