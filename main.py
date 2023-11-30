@@ -53,7 +53,7 @@ def update_stats(combo):
     # convert the keys to int
     stats['count'] = {int(k): v for k, v in stats['count'].items()}
 
-    #increment the count for each number
+    # increment the count for each number
     for number in combo:
         stats['count'][number] += 1
 
