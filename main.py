@@ -45,15 +45,14 @@ def verify(combo):
 
     return {k: v for k, v in matches.items() if v > 0}
 
-def reset_stats():
-    to_number = 10
+def reset_stats(max):
     stats = {}
 
     # build count layer
     stats['count'] = {}
 
     # init to 0 for all numbers
-    for i in range(1, to_number + 1):
+    for i in range(1, max + 1):
         stats['count'][i] = 0
 
     # write the stats to the file
