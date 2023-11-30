@@ -45,6 +45,21 @@ def verify(combo):
 
     return {k: v for k, v in matches.items() if v > 0}
 
+def reset_stats():
+    to_number = 10
+    stats = {}
+
+    # build count layer
+    stats['count'] = {}
+
+    # init to 0 for all numbers
+    for i in range(1, to_number + 1):
+        stats['count'][i] = 0
+
+    # write the stats to the file
+    with open(STATS_FILE, 'w') as f:
+        json.dump(stats, f)
+
 def update_stats(combo):
     # get the stats from the file
     with open(STATS_FILE, 'r') as f:
