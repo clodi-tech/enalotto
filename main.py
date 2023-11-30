@@ -49,7 +49,21 @@ def update_stats(combo):
     # get the stats from the file
     with open(STATS_FILE, 'r') as f:
         stats = json.load(f)
-    print(stats)
+
+    # if the file is empty
+    if not stats:
+        # init the stats
+        stats = {i: 0 for i in range(1, 10)}
+
+    print(f'stats: {stats}')
+
+    #increment the count for each number
+    for number in combo:
+        stats[number] += 1
+
+    # write the stats to the file
+    with open(STATS_FILE, 'w') as f:
+        json.dump(stats, f)
 
 def main():
     # get the last winning combination
