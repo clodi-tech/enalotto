@@ -25,24 +25,19 @@ def get_winning():
 
 def verify(combo):
     with open(PLAY_FILE, 'r') as f:
-        plays = f.readlines()
+        # convert each line into a list of integers
+        plays = [list(map(int, play.split(','))) for play in f.readlines()]
 
-    # init matches counter from 1 to 6
+    # init matches
     matches = {i: 0 for i in range(1, 7)}
 
     for play in plays:
-        # convert play to numbers
-        play = [int(number) for number in play.split(',')]
+        # count the number of matching numbers
+        match_count = len(set(play) & set(combo))
 
-        this = 0
-        # count the number of matches
-        for p in play:
-            if p in combo:
-                this += 1
-
-        # increment the counter
-        if this > 0:
-            matches[this] += 1
+        # increment if there is a match
+        if match_count > 0:
+            matches[match_count] += 1
 
     return {k: v for k, v in matches.items() if v > 0}
 
