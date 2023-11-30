@@ -68,10 +68,20 @@ def update_stats(combo):
 
     # convert the keys to int
     stats['count'] = {int(k): v for k, v in stats['count'].items()}
+    stats['delay'] = {int(k): v for k, v in stats['delay'].items()}
 
     # increment the count for each number
     for number in combo:
+        # update the count
         stats['count'][number] += 1
+
+        # reset the delay
+        stats['delay'][number] = 0
+
+    # increment the delay for each number not in the combo
+    for number in stats['delay']:
+        if number not in combo:
+            stats['delay'][number] += 1
 
     # print the stats in a readable format
     print('\n>>  stats:')
@@ -101,8 +111,8 @@ def main():
     # update statistics
     update_stats(win_combo)
 
-# run main function
-main()
-
 # reset stats for x numbers
 # reset_stats(10)
+
+# run main function
+main()
