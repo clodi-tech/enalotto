@@ -97,20 +97,15 @@ def update_stats(combo):
 
 def main():
     # get the last winning combination
-    win_combo = get_winning()
-    win_combo = [int(number) for number in win_combo.split(',')]
+    win_combo = [int(number) for number in get_winning().split(',')]
     print(f'>   winning combination: {win_combo}')
 
     # verify if the winning combination has been played
     verification = verify(win_combo)
 
     # print the matches else no matches
-    if verification:
-        print('\n>>  matches:')
-        for k, v in verification.items():
-            print(f'>   {v} matches for {k}')
-    else:
-        print('\n>>  no matches')
+    print('\n>>  matches:' if verification else '\n>>  no matches')
+    print('\n'.join(f'>   {v} matches for {k}' for k, v in verification.items()) if verification else '')
 
     # update statistics
     update_stats(win_combo)
