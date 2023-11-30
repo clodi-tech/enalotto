@@ -84,21 +84,16 @@ def update_stats(combo):
 
     # update count and delay stats
     for key in ['count', 'delay']:
-        stats[key].update(calculate_stats(stats[key]))
+        stats['max'][key] = max(stats[key].values())
+        stats['min'][key] = min(stats[key].values())
+        stats['avg'][key] = statistics.mean(stats[key].values())
+        stats['median'][key] = statistics.median(stats[key].values())
+        stats['mode'][key] = statistics.mode(stats[key].values())
 
     print('\n>>  stats:', json.dumps(stats, indent=4))
 
     with open(STATS_FILE, 'w') as f:
         json.dump(stats, f)
-
-def calculate_stats(data):
-    return {
-        'min': min(data.values()),
-        'max': max(data.values()),
-        'avg': statistics.mean(data.values()),
-        'median': statistics.median(data.values()),
-        'mode': statistics.mode(data.values())
-    }
 
 def main():
     # get the last winning combination
