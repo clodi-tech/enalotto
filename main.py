@@ -82,6 +82,30 @@ def update_stats(combo):
         if stats['count'][number] > stats['count']['max']:
             stats['count']['max'] = stats['count'][number]
 
+    # update the min count
+    stats['count']['min'] = min(stats['count'].values())
+
+    # update the avg count
+    stats['count']['avg'] = sum(stats['count'].values()) / len(stats['count'])
+
+    # update the median count
+    stats['count']['median'] = sorted(stats['count'].values())[len(stats['count'])//2]
+
+    # update the mode count
+    stats['count']['mode'] = max(stats['count'].values())
+
+    # update the min delay
+    stats['delay']['min'] = min(stats['delay'].values())
+
+    # update the avg delay
+    stats['delay']['avg'] = sum(stats['delay'].values()) / len(stats['delay'])
+
+    # update the median delay
+    stats['delay']['median'] = sorted(stats['delay'].values())[len(stats['delay'])//2]
+    
+    # update the mode delay
+    stats['delay']['mode'] = max(stats['delay'].values())
+
     print('\n>>  stats:', json.dumps(stats, indent=4))
 
     with open(STATS_FILE, 'w') as f:
