@@ -5,13 +5,20 @@ const mono = JetBrains_Mono({
     weight: ['300']
 });
 
+const top = 10;
+
 export default function Home() {
+  const latest = Array.from({length: top}, (_, i) => ({
+    number: Math.floor(Math.random() * 90) + 1,
+    score: Math.floor(Math.random() * 100),
+  }));
+
   const forecasts = Array.from({length: 90}, (_, i) => ({
     number: i + 1,
     score: Math.floor(Math.random() * 100),
   }));
 
-  const topForecasts = forecasts.sort((a, b) => b.score - a.score).slice(0, 10);
+  const topForecasts = forecasts.sort((a, b) => b.score - a.score).slice(0, top);
 
   return (
     <main>
@@ -20,10 +27,19 @@ export default function Home() {
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {topForecasts.map((forecast, index) => (
           <div className={mono.className}>
-          <div key={index} className="flex gap-2 justify-center items-center">
+          <div key={index} className="flex gap-1 justify-center items-center">
             <p>{forecast.number.toString().padStart(2, '0')}</p>
             <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
           </div>
+          </div>
+        ))}
+      </div>
+      <h2>Latest</h2>
+      <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
+        {latest.map((forecast, index) => (
+          <div key={index} className="flex gap-1 justify-center items-center">
+            <p>{forecast.number.toString().padStart(2, '0')}</p>
+            <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
           </div>
         ))}
       </div>
