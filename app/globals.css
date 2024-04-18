@@ -64,6 +64,18 @@ small {
   color: #00FF44;
 }
 
-.loser {
-  color: #FF0044;
+.grid { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 1.2rem; 
+  flex-wrap: wrap; 
+}
+
+.score { 
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  border: 1px solid slategray;
+  border-radius: 4px;
+  color: slategray;
 }
