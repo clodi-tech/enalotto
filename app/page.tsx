@@ -63,12 +63,12 @@ export default function Home() {
       </div>
       <div className={mono.className}>
         <form action={handleSubmit} className='flex gap-1'>
-          <input name='i' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
-          <input name='ii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
-          <input name='iii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
-          <input name='iv' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
-          <input name='v' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
-          <input name='vi' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='i' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+          <input name='ii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+          <input name='iii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+          <input name='iv' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+          <input name='v' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+          <input name='vi' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
           <button type="submit" className='h-9 w-11 bg-white text-gray-900 rounded-md'>add</button>
         </form>
       </div>
