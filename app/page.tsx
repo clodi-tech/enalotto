@@ -26,20 +26,23 @@ export default function Home() {
       <small className='text-slate-500'>next lottery 2024.04.20</small>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {topForecasts.map((forecast, index) => (
-          <div className={mono.className}>
-          <div key={index} className="flex gap-1 justify-center items-center">
-            <p>{forecast.number.toString().padStart(2, '0')}</p>
-            <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
-          </div>
+          <div key={index} className={mono.className}>
+            <div className="flex gap-1 justify-center items-center">
+              <p>{forecast.number.toString().padStart(2, '0')}</p>
+              <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
+            </div>
           </div>
         ))}
       </div>
       <h2>Latest</h2>
+      <small className='text-slate-500'>2024.04.10</small>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {latest.map((forecast, index) => (
-          <div key={index} className="flex gap-1 justify-center items-center">
-            <p>{forecast.number.toString().padStart(2, '0')}</p>
-            <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
+          <div key={index} className={mono.className}>
+            <div className="flex gap-1 justify-center items-center">
+              <p>{forecast.number.toString().padStart(2, '0')}</p>
+              <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
+            </div>
           </div>
         ))}
       </div>
