@@ -8,8 +8,12 @@ const mono = JetBrains_Mono({
 const top = 10;
 
 export default function Home() {
-  const latest = Array.from({length: top}, (_, i) => ({
-    number: Math.floor(Math.random() * 90) + 1,
+  let uniqueNumbers = new Set();
+  while (uniqueNumbers.size < top) {
+    uniqueNumbers.add(Math.floor(Math.random() * 90) + 1);
+  }
+  const latest = Array.from(uniqueNumbers).map(number => ({
+    number: number as number,
     score: Math.floor(Math.random() * 15) + 85,
   }));
   latest.sort((a, b) => b.score - a.score);
