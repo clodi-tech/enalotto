@@ -43,11 +43,13 @@ export default function Home() {
       <small className='text-slate-500'>2024.04.10</small>
       <h3>{winners.join(' - ')}</h3>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
-        {latest.map((forecast, index) => (
+        {latest.map((last, index) => (
           <div key={index} className={mono.className}>
             <div className="flex gap-1 justify-center items-center">
-              <p>{forecast.number.toString().padStart(2, '0')}</p>
-              <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
+              <p className={winners.includes(last.number) ? 'winner' : 'loser'}>
+                {last.number.toString().padStart(2, '0')}
+              </p>
+              <small className="px-1 border border-slate-700 rounded-sm">{last.score.toString().padStart(2, '0')}</small>
             </div>
           </div>
         ))}

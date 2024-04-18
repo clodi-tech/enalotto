@@ -59,3 +59,11 @@ small {
   font-size: 0.8rem;
   font-weight: 500;
 }
+
+.winner {
+  color: #00FF44;
+}
+
+.loser {
+  color: #FF0044;
+}
