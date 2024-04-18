@@ -24,7 +24,7 @@ function generateScores(numbers: number[], minScore: number, maxScore: number) {
 
 export default function Home() {
   const latestNumbers = generateRandomNumbers(top, 90);
-  const latest = generateScores(latestNumbers, 85, 99).sort((a, b) => b.score - a.score);
+  const latest = generateScores(latestNumbers, 85, 99).sort((a, b) => a.number - b.number);
 
   const winners = generateRandomNumbers(6, 90).sort((a, b) => a - b);
 
