@@ -10,8 +10,9 @@ const top = 10;
 export default function Home() {
   const latest = Array.from({length: top}, (_, i) => ({
     number: Math.floor(Math.random() * 90) + 1,
-    score: Math.floor(Math.random() * 100),
+    score: Math.floor(Math.random() * 15) + 85,
   }));
+  latest.sort((a, b) => b.score - a.score);
 
   // generate an array of 6 random numbers
   const winners = Array.from({length: 6}, () => Math.floor(Math.random() * 90) + 1);
@@ -39,8 +40,8 @@ export default function Home() {
         ))}
       </div>
       <h2>Latest</h2>
-      <h3>{winners.join(' - ')}</h3>
       <small className='text-slate-500'>2024.04.10</small>
+      <h3>{winners.join(' - ')}</h3>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {latest.map((forecast, index) => (
           <div key={index} className={mono.className}>
