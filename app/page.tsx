@@ -1,5 +1,8 @@
 export default function Home() {
-  const forecasts = Array.from({length: 10}, () => Math.floor(Math.random() * 90) + 1);
+  const forecasts = Array.from({length: 10}, () => ({
+    number: Math.floor(Math.random() * 90) + 1,
+    score: Math.floor(Math.random() * 101),
+  }));
 
   return (
     <main>
@@ -10,7 +13,8 @@ export default function Home() {
         {forecasts.map((forecast, index) => (
           <div key={index} className="flex gap-2 justify-center items-center">
             <small>{(index+1).toString().padStart(2, '0')}.</small>
-            <p>{forecast.toString().padStart(2, '0')}</p>
+            <p>{forecast.number.toString().padStart(2, '0')}</p>
+            <small className="px-1 border border-slate-700 rounded-sm">{forecast.score.toString().padStart(2, '0')}</small>
           </div>
         ))}
       </div>
