@@ -7,37 +7,37 @@ const mono = JetBrains_Mono({
 
 const top = 10;
 
+function generateRandomNumbers(count: number, max: number) {
+  const numbers = new Set<number>();
+  while (numbers.size < count) {
+    numbers.add(Math.floor(Math.random() * max) + 1);
+  }
+  return Array.from(numbers);
+}
+
+function generateScores(numbers: number[], minScore: number, maxScore: number) {
+  return numbers.map(number => ({
+    number,
+    score: Math.floor(Math.random() * (maxScore - minScore + 1)) + minScore,
+  }));
+}
+
 export default function Home() {
-  let uniqueNumbers = new Set();
-  while (uniqueNumbers.size < top) {
-    uniqueNumbers.add(Math.floor(Math.random() * 90) + 1);
-  }
-  const latest = Array.from(uniqueNumbers).map(number => ({
-    number: number as number,
-    score: Math.floor(Math.random() * 15) + 85,
-  }));
-  latest.sort((a, b) => b.score - a.score);
+  const latestNumbers = generateRandomNumbers(top, 90);
+  const latest = generateScores(latestNumbers, 85, 99).sort((a, b) => b.score - a.score);
 
-  let setWinners = new Set();
-  while (setWinners.size < 6) {
-    setWinners.add(Math.floor(Math.random() * 90) + 1);
-  }
-  const winners: number[] = Array.from(setWinners) as number[];
-  winners.sort((a: number, b: number) => a - b);
+  const winners = generateRandomNumbers(6, 90).sort((a, b) => a - b);
 
-  const forecasts = Array.from({length: 90}, (_, i) => ({
-    number: i + 1,
-    score: Math.floor(Math.random() * 100),
-  }));
-
-  const topForecasts = forecasts.sort((a, b) => b.score - a.score).slice(0, top);
+  const forecasts = generateScores(Array.from({length: 90}, (_, i) => i + 1), 0, 99)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, top);
 
   return (
     <main>
       <h2>Forecast</h2>
       <small className='text-slate-500'>next lottery 2024.04.20</small>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
-        {topForecasts.map((forecast, index) => (
+        {forecasts.map((forecast, index) => (
           <div key={index} className={mono.className}>
             <div className="flex gap-1 justify-center items-center">
               <p>{forecast.number.toString().padStart(2, '0')}</p>
