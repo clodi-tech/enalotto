@@ -14,9 +14,12 @@ export default function Home() {
   }));
   latest.sort((a, b) => b.score - a.score);
 
-  // generate an array of 6 random numbers
-  const winners = Array.from({length: 6}, () => Math.floor(Math.random() * 90) + 1);
-  winners.sort((a, b) => a - b);
+  let setWinners = new Set();
+  while (setWinners.size < 6) {
+    setWinners.add(Math.floor(Math.random() * 90) + 1);
+  }
+  const winners: number[] = Array.from(setWinners) as number[];
+  winners.sort((a: number, b: number) => a - b);
 
   const forecasts = Array.from({length: 90}, (_, i) => ({
     number: i + 1,
