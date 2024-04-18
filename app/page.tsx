@@ -15,9 +15,8 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Forecast</h1>
-      <h2>top 10 for the next lottery</h2>
-      <small>2024.04.20</small>
+      <h2>Forecast</h2>
+      <small className='text-slate-500'>next lottery 2024.04.20</small>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {topForecasts.map((forecast, index) => (
           <div className={mono.className}>
