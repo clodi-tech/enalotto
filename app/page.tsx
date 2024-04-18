@@ -13,6 +13,10 @@ export default function Home() {
     score: Math.floor(Math.random() * 100),
   }));
 
+  // generate an array of 6 random numbers
+  const winners = Array.from({length: 6}, () => Math.floor(Math.random() * 90) + 1);
+  winners.sort((a, b) => a - b);
+
   const forecasts = Array.from({length: 90}, (_, i) => ({
     number: i + 1,
     score: Math.floor(Math.random() * 100),
@@ -35,6 +39,7 @@ export default function Home() {
         ))}
       </div>
       <h2>Latest</h2>
+      <h3>{winners.join(' - ')}</h3>
       <small className='text-slate-500'>2024.04.10</small>
       <div className="flex justify-center items-center gap-4 max-w-sm flex-wrap">
         {latest.map((forecast, index) => (
