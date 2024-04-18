@@ -5,6 +5,8 @@ import "./globals.css";
 import Header from "@/app/ui/header";
 import Footer from "@/app/ui/footer";
 
+import { Analytics } from "@vercel/analytics/react";
+
 const font = Rajdhani({ 
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"]
@@ -26,6 +28,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
