@@ -1,6 +1,6 @@
 export default function Home() {
-  const forecasts = Array.from({length: 10}, () => ({
-    number: Math.floor(Math.random() * 90) + 1,
+  const forecasts = Array.from({length: 90}, (_, i) => ({
+    number: i + 1,
     score: Math.floor(Math.random() * 101),
   }));
 
