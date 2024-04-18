@@ -42,20 +42,24 @@ export default function Home() {
 
   return (
     <main>
-      <h2>Forecast</h2>
-      <small className='text-slate-500'>Next lottery: 2024.04.20</small>
-      <div className="grid max-w-sm">
-        {forecasts.map((forecast, index) => 
-          <NumberDisplay key={index} number={forecast.number} score={forecast.score} />
-        )}
+      <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
+        <h2>Forecast</h2>
+        <small className='text-slate-500'>Next lottery 2024.04.20</small>
+        <div className="grid max-w-sm">
+          {forecasts.map((forecast, index) => 
+            <NumberDisplay key={index} number={forecast.number} score={forecast.score} />
+          )}
+        </div>
       </div>
-      <h2>Latest</h2>
-      <small className='text-slate-500'>2024.04.10</small>
-      <h3>{winners.join(' - ')}</h3>
-      <div className="grid max-w-sm">
-        {latest.map((item, index) => 
-          <NumberDisplay key={index} number={item.number} score={item.score} isHighlighted={winners.includes(item.number)} />
-        )}
+      <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
+        <h2>Latest</h2>
+        <small className='text-slate-500'>2024.04.10</small>
+        <h3>{winners.join(' - ')}</h3>
+        <div className="grid max-w-sm">
+          {latest.map((item, index) => 
+            <NumberDisplay key={index} number={item.number} score={item.score} isHighlighted={winners.includes(item.number)} />
+          )}
+        </div>
       </div>
     </main>
   )
