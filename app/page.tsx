@@ -40,6 +40,16 @@ export default function Home() {
     .sort((a, b) => b.score - a.score)
     .slice(0, top);
 
+  async function handleSubmit(formData: FormData) {
+    "use server"
+    console.log(formData.get('i'));
+    console.log(formData.get('ii'));
+    console.log(formData.get('iii'));
+    console.log(formData.get('iv'));
+    console.log(formData.get('v'));
+    console.log(formData.get('vi'));
+  }
+
   return (
     <main>
       <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
@@ -50,6 +60,17 @@ export default function Home() {
             <NumberDisplay key={index} number={forecast.number} score={forecast.score} />
           )}
         </div>
+      </div>
+      <div className={mono.className}>
+        <form action={handleSubmit} className='flex gap-1'>
+          <input name='i' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='ii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='iii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='iv' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='v' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <input name='vi' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm'/>
+          <button type="submit" className='h-9 w-11 bg-white text-gray-900 rounded-md'>add</button>
+        </form>
       </div>
       <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
         <h2>Latest</h2>
