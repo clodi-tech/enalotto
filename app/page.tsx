@@ -31,7 +31,9 @@ const NumberDisplay = ({ number, score, isHighlighted }: { number: number, score
 
 export default function Home() {
   const numbers = getRandomSet(top, maxNumber);
-  const latest = getScoredNumbers(numbers, 100);
+  const latest = getScoredNumbers(numbers, 100)
+    .sort((a, b) => a.number - b.number);
+  
   const winners = getRandomSet(6, maxNumber).sort((a, b) => a - b);
 
   const forecasts = getScoredNumbers(Array.from({ length: maxNumber }, (_, i) => i + 1), 100)
