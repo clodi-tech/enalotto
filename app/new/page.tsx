@@ -32,6 +32,29 @@ function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: an
     )
 }
 
+function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, forecast: any, winners: any, indices: number[] }) {
+    console.log(winners)
+    //winners = { id: 1, i: 12, ii: 23, iii: 30, iv: 44, v: 56, vi: 78, j: 88, ss: 90 }
+    
+    return (
+        <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
+            <h2>last lottery</h2>
+            <small className='text-slate-500'>{lottery.id}</small>
+            <h3>{winners.i} - {winners.ii} - {winners.iii} - {winners.iv} - {winners.v} - {winners.vi} - {winners.j} - {winners.ss}</h3>
+            <div className="grid max-w-sm">
+                {indices.map(index => (
+                    <div key={index} className={mono.className}>
+                        <div className="flex gap-1 justify-center items-center">
+                            <p>{forecast[`num_${index}`].toString().padStart(2, '0')}</p>
+                            <small className="score">{forecast[`score_${index}`].toString().padStart(2, '0')}</small>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
 async function handleSubmit(formData: FormData) {
     "use server"
 
@@ -145,20 +168,21 @@ function FormWinners(){
 export default async function Page() {
     // get the next lottery and the forecast
     const { rows: [next] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is null`;
-    const { rows: [forecast] } = await sql`SELECT * FROM forecasts WHERE id = ${next.forecast_id}`;
+    const { rows: [forecast_next] } = await sql`SELECT * FROM forecasts WHERE id = ${next.forecast_id}`;
 
     // get the last lottery and the winners
     const { rows: [last] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is not null ORDER BY id DESC LIMIT 1`;
     const { rows: [winners] } = await sql`SELECT * FROM winners WHERE id = ${last.winners_id}`;
+    const { rows: [forecast_last] } = await sql`SELECT * FROM forecasts WHERE id = ${last.forecast_id}`;
 
     // setup the indices for the forecast pairs
     const indices = Array.from({ length: 10 }, (_, i) => i + 1);
 
     return(
         <main>
-            <NextLottery lottery={next} forecast={forecast} indices={indices} />
+            <NextLottery lottery={next} forecast={forecast_next} indices={indices} />
             <FormWinners />
-            {JSON.stringify(last)}
+            <LastLottery lottery={last} forecast={forecast_last} winners={winners} indices={indices} />
         </main>
     )
 }
