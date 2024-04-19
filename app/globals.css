@@ -79,3 +79,13 @@ small {
   border-radius: 4px;
   color: slategray;
 }
+
+input {
+  height: 1.9rem;
+  width: 1.9rem;
+  text-align: center;
+  background-color: transparent;
+  border-bottom: 2px solid #888888;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}

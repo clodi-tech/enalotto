@@ -41,18 +41,18 @@ function FormWinners(){
     return (
         <div className={mono.className}>
             <form action={handleSubmit} className='flex flex-col justify-center items-center gap-4'>
-                <div className='flex gap-1'>
-                    <input name='i' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='ii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='iii' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='iv' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='v' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='vi' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+                <div className='flex gap-3'>
+                    <input name='i' type="text" maxLength={2} placeholder="i" />
+                    <input name='ii' type="text" maxLength={2} placeholder="ii" />
+                    <input name='iii' type="text" maxLength={2} placeholder="iii" />
+                    <input name='iv' type="text" maxLength={2} placeholder="iv" />
+                    <input name='v' type="text" maxLength={2} placeholder="v" />
+                    <input name='vi' type="text" maxLength={2} placeholder="vi" />
                 </div>
-                <div className='flex gap-1'>
-                    <input name='j' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='ss' type="text" maxLength={2} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
-                    <input name='pin' type="password" maxLength={8} className='h-9 w-11 border-b-2 border-gray-400 bg-transparent px-3 py-1 text-sm focus:border-none focus:outline-none focus:ring-0'/>
+                <div className='flex gap-3'>
+                    <input name='j' type="text" maxLength={2} placeholder="j" />
+                    <input name='ss' type="text" maxLength={2} placeholder="ss" />
+                    <input name='pin' type="password" maxLength={8} className='w-20' placeholder='pin' />
                     <button type="submit" className='h-9 w-11 bg-white text-gray-900 rounded-md'>add</button>
                 </div>
             </form>
