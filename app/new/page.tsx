@@ -61,14 +61,13 @@ function FormWinners(){
 }
 
 export default async function Page() {
-    // get the forecast id from the next lottery
+    // get the next lottery and the forecast
     const { rows: [next] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is null`;
-
-    // get the last lottery
-    const { rows: [last] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is not null ORDER BY id DESC LIMIT 1`;
-
-    // get the forecast numbers
     const { rows: [forecast] } = await sql`SELECT * FROM forecasts WHERE id = ${next.forecast_id}`;
+
+    // get the last lottery and the winners
+    const { rows: [last] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is not null ORDER BY id DESC LIMIT 1`;
+    // const { rows: [winners] } = await sql`SELECT * FROM winners WHERE id = ${last.winners_id}`;
 
     // setup the indices for the forecast pairs
     const indices = Array.from({ length: 10 }, (_, i) => i + 1);
