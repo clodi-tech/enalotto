@@ -1,5 +1,6 @@
 import { JetBrains_Mono } from 'next/font/google';
 import { sql } from '@vercel/postgres';
+import { revalidatePath } from 'next/cache';
 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ['300'] });
 
@@ -59,6 +60,15 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Winners successfully inserted', winners_rows);
 
+    // update the lottery with the winners
+    const { rows: lottery_first } = await sql`
+        UPDATE lottery
+        SET winners_id = ${winners_rows[0].id}
+        WHERE forecast_id is not null AND winners_id is null
+        RETURNING *;
+    `;
+    console.log('Lottery successfully updated', lottery_first);
+
     // generate new forecast
     const forecasts = getScoredNumbers(Array.from({ length: 90 }, (_, i) => i + 1), 100)
         .sort((a, b) => b.score - a.score)
@@ -92,6 +102,21 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Forecast successfully inserted', forecasts_rows);
 
+    // update the lottery with the forecast
+    const { rows: lottery_second } = await sql`
+        UPDATE lottery
+        SET forecast_id = 2
+        WHERE id = (
+            SELECT id FROM lottery
+            WHERE forecast_id IS NULL AND winners_id IS NULL
+            ORDER BY id ASC
+            LIMIT 1
+        )
+        RETURNING *;
+    `;
+    console.log('Lottery successfully updated', lottery_second);
+
+    revalidatePath('/new');
 }
 
 function FormWinners(){
@@ -124,7 +149,7 @@ export default async function Page() {
 
     // get the last lottery and the winners
     const { rows: [last] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is not null ORDER BY id DESC LIMIT 1`;
-    // const { rows: [winners] } = await sql`SELECT * FROM winners WHERE id = ${last.winners_id}`;
+    const { rows: [winners] } = await sql`SELECT * FROM winners WHERE id = ${last.winners_id}`;
 
     // setup the indices for the forecast pairs
     const indices = Array.from({ length: 10 }, (_, i) => i + 1);
