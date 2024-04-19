@@ -5,6 +5,13 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ['300'] });
 
 const pin = process.env.PIN;
 
+function getScoredNumbers(numbers: number[], maxScore: number) {
+    return numbers.map(number => ({
+      number,
+      score: Math.floor(Math.random() * maxScore),
+    }));
+  }
+
 function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: any, indices: number[] }) {
     return (
         <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
@@ -35,6 +42,40 @@ async function handleSubmit(formData: FormData) {
     console.log(formData.get('j'));
     console.log(formData.get('ss'));
     console.log(formData.get('pin'));
+
+    // generate new forecast
+    const forecasts = getScoredNumbers(Array.from({ length: 90 }, (_, i) => i + 1), 100)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+    
+    // insert the forecast into the database
+    const { rows } = await sql`
+        INSERT INTO forecasts (
+            num_1, score_1,
+            num_2, score_2,
+            num_3, score_3,
+            num_4, score_4,
+            num_5, score_5,
+            num_6, score_6,
+            num_7, score_7,
+            num_8, score_8,
+            num_9, score_9,
+            num_10, score_10
+        ) VALUES (
+            ${forecasts[0].number}, ${forecasts[0].score},
+            ${forecasts[1].number}, ${forecasts[1].score},
+            ${forecasts[2].number}, ${forecasts[2].score},
+            ${forecasts[3].number}, ${forecasts[3].score},
+            ${forecasts[4].number}, ${forecasts[4].score},
+            ${forecasts[5].number}, ${forecasts[5].score},
+            ${forecasts[6].number}, ${forecasts[6].score},
+            ${forecasts[7].number}, ${forecasts[7].score},
+            ${forecasts[8].number}, ${forecasts[8].score},
+            ${forecasts[9].number}, ${forecasts[9].score}
+        )
+    `;
+    console.log('Forecast successfully inserted', rows);
+
 }
 
 function FormWinners(){
