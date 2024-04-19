@@ -33,15 +33,31 @@ function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: an
 
 async function handleSubmit(formData: FormData) {
     "use server"
-    console.log(formData.get('i'));
-    console.log(formData.get('ii'));
-    console.log(formData.get('iii'));
-    console.log(formData.get('iv'));
-    console.log(formData.get('v'));
-    console.log(formData.get('vi'));
-    console.log(formData.get('j'));
-    console.log(formData.get('ss'));
-    console.log(formData.get('pin'));
+
+    if(formData.get('pin') !== pin) return;
+    
+    // get the form data
+    const winners = {
+        i: String(formData.get('i')),
+        ii: String(formData.get('ii')),
+        iii: String(formData.get('iii')),
+        iv: String(formData.get('iv')),
+        v: String(formData.get('v')),
+        vi: String(formData.get('vi')),
+        j: String(formData.get('j')),
+        ss: String(formData.get('ss')),
+    };
+
+    // insert the winners into the database
+    const { rows: winners_rows } = await sql`
+        INSERT INTO winners (
+            i, ii, iii, iv, v, vi, j, ss
+        ) VALUES (
+            ${winners.i}, ${winners.ii}, ${winners.iii}, ${winners.iv},
+            ${winners.v}, ${winners.vi}, ${winners.j}, ${winners.ss}
+        ) RETURNING id;
+    `;
+    console.log('Winners successfully inserted', winners_rows);
 
     // generate new forecast
     const forecasts = getScoredNumbers(Array.from({ length: 90 }, (_, i) => i + 1), 100)
@@ -49,7 +65,7 @@ async function handleSubmit(formData: FormData) {
         .slice(0, 10);
     
     // insert the forecast into the database
-    const { rows } = await sql`
+    const { rows: forecasts_rows } = await sql`
         INSERT INTO forecasts (
             num_1, score_1,
             num_2, score_2,
@@ -72,9 +88,9 @@ async function handleSubmit(formData: FormData) {
             ${forecasts[7].number}, ${forecasts[7].score},
             ${forecasts[8].number}, ${forecasts[8].score},
             ${forecasts[9].number}, ${forecasts[9].score}
-        )
+        ) RETURNING id;
     `;
-    console.log('Forecast successfully inserted', rows);
+    console.log('Forecast successfully inserted', forecasts_rows);
 
 }
 
