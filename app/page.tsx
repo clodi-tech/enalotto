@@ -144,7 +144,7 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Lottery successfully updated', lottery_second);
 
-    revalidatePath('/new');
+    revalidatePath('/');
 }
 
 function FormWinners(){
