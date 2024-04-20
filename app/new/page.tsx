@@ -34,6 +34,10 @@ function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: an
 
 function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, forecast: any, winners: any, indices: number[] }) {
     //winners = { id: 1, i: 12, ii: 23, iii: 30, iv: 44, v: 56, vi: 78, j: 88, ss: 90 }
+    const winnerNumbers = new Set([
+        winners.i, winners.ii, winners.iii, winners.iv,
+        winners.v, winners.vi, winners.j, winners.ss
+    ].map(String));
     
     return (
         <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
@@ -44,7 +48,9 @@ function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, for
                 {indices.map(index => (
                     <div key={index} className={mono.className}>
                         <div className="flex gap-1 justify-center items-center">
-                            <p className={false ? 'winner' : ''} >{forecast[`num_${index}`].toString().padStart(2, '0')}</p>
+                            <p className={winnerNumbers.has(forecast[`num_${index}`].toString()) ? 'winner' : ''}>
+                                {forecast[`num_${index}`].toString().padStart(2, '0')}
+                            </p>
                             <small className="score">{forecast[`score_${index}`].toString().padStart(2, '0')}</small>
                         </div>
                     </div>
