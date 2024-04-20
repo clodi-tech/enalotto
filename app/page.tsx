@@ -133,7 +133,7 @@ async function handleSubmit(formData: FormData) {
     // update the lottery with the forecast
     const { rows: lottery_second } = await sql`
         UPDATE lottery
-        SET forecast_id = 2
+        SET forecast_id = ${forecasts_rows[0].id}
         WHERE id = (
             SELECT id FROM lottery
             WHERE forecast_id IS NULL AND winners_id IS NULL
