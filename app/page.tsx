@@ -17,44 +17,26 @@ function getScoredNumbers(numbers: number[], maxScore: number) {
     }));
 }
 
-// Component to display the next lottery draw information
-function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: any, indices: number[] }) {
-    return (
-        <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
-            <h2>next lottery</h2>
-            <small className='text-slate-500'>{lottery.id}</small>
-            <div className="grid max-w-sm">
-                {indices.map(index => (
-                    <div key={index} className={mono.className}>
-                        <div className="flex gap-1 justify-center items-center">
-                            <p>{forecast[`num_${index}`].toString().padStart(2, '0')}</p>
-                            <small className="score">{forecast[`score_${index}`].toString().padStart(2, '0')}</small>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    )
-}
-
-// Component to display the last lottery draw including the winners
-function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, forecast: any, winners: any, indices: number[] }) {
-    // Creates a set of winner numbers for easy comparison
-    const winnerNumbers = new Set([
+// Unified Component to display lottery draw information
+function LotteryDisplay({ title, lottery, forecast, indices, winners }: { title: string, lottery: any, forecast: any, indices: number[], winners?: any }) {
+    // Create a set of winner numbers for easy comparison if winners are provided
+    const winnerNumbers = winners ? new Set([
         winners.i, winners.ii, winners.iii, winners.iv,
         winners.v, winners.vi, winners.j, winners.ss
-    ].map(String));
-    
+    ].map(String)) : new Set();
+
+    // Determine if the number is a winning number
+    const isWinner = (number: string) => winners && winnerNumbers.has(number);
+
     return (
         <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
-            <h2>last lottery</h2>
+            <h2>{title}</h2>
             <small className='text-slate-500'>{lottery.id}</small>
-            <h3>{winners.i} - {winners.ii} - {winners.iii} - {winners.iv} - {winners.v} - {winners.vi} - {winners.j} - {winners.ss}</h3>
             <div className="grid max-w-sm">
                 {indices.map(index => (
                     <div key={index} className={mono.className}>
                         <div className="flex gap-1 justify-center items-center">
-                            <p className={winnerNumbers.has(forecast[`num_${index}`].toString()) ? 'winner' : ''}>
+                            <p className={isWinner(forecast[`num_${index}`].toString()) ? 'winner' : ''}>
                                 {forecast[`num_${index}`].toString().padStart(2, '0')}
                             </p>
                             <small className="score">{forecast[`score_${index}`].toString().padStart(2, '0')}</small>
@@ -63,7 +45,16 @@ function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, for
                 ))}
             </div>
         </div>
-    )
+    );
+}
+
+// Use the unified component for both scenarios
+function NextLottery({ lottery, forecast, indices }: { lottery: any, forecast: any, indices: number[] }) {
+    return <LotteryDisplay title="Next Lottery" lottery={lottery} forecast={forecast} indices={indices} />;
+}
+
+function LastLottery({ lottery, forecast, winners, indices }: { lottery: any, forecast: any, winners: any, indices: number[] }) {
+    return <LotteryDisplay title="Last Lottery" lottery={lottery} forecast={forecast} winners={winners} indices={indices} />;
 }
 
 // Function to handle the submission of winners form data
