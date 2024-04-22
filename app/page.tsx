@@ -32,6 +32,15 @@ function LotteryDisplay({ title, lottery, forecast, indices, winners }: { title:
         <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
             <h2>{title}</h2>
             <small className='text-slate-500'>{lottery.id}</small>
+
+            {/* Conditionally render the list of winners if available */}
+            {winners && (
+                <h3>
+                    {winners.i} - {winners.ii} - {winners.iii} - {winners.iv} - {winners.v} - {winners.vi} - {winners.j} - {winners.ss}
+                </h3>
+            )}
+                
+            {/* Render the forecast numbers with their scores */}
             <div className="grid max-w-sm">
                 {indices.map(index => (
                     <div key={index} className={mono.className}>
