@@ -66,82 +66,51 @@ function LastLottery({ lottery, forecast, winners, indices }: { lottery: any, fo
     return <LotteryDisplay title="Last Lottery" lottery={lottery} forecast={forecast} winners={winners} indices={indices} />;
 }
 
-// Function to handle the submission of winners form data
-async function handleSubmit(formData: FormData) {
-    "use server"
-
-    // Verify that the submitted PIN matches the expected one
-    if(formData.get('pin') !== pin) return;
-
-    // Get the form data
-    const winners = {
-        i: String(formData.get('i')),
-        ii: String(formData.get('ii')),
-        iii: String(formData.get('iii')),
-        iv: String(formData.get('iv')),
-        v: String(formData.get('v')),
-        vi: String(formData.get('vi')),
-        j: String(formData.get('j')),
-        ss: String(formData.get('ss')),
-    };
-    
-    // Insert the winners into the database and log the insertion
-    const { rows: winners_rows } = await sql`
-        INSERT INTO winners (
-            i, ii, iii, iv, v, vi, j, ss
-        ) VALUES (
-            ${winners.i}, ${winners.ii}, ${winners.iii}, ${winners.iv},
-            ${winners.v}, ${winners.vi}, ${winners.j}, ${winners.ss}
-        ) RETURNING id;
+// Helper function to insert winners and return their IDs
+async function insertWinners(winners: any) {
+    const { rows } = await sql`
+        INSERT INTO winners (i, ii, iii, iv, v, vi, j, ss)
+        VALUES (${winners.i}, ${winners.ii}, ${winners.iii}, ${winners.iv}, ${winners.v}, ${winners.vi}, ${winners.j}, ${winners.ss})
+        RETURNING id;
     `;
-    console.log('Winners successfully inserted', winners_rows);
+    if (rows.length === 0) throw new Error('No winner was inserted.');
+    return rows[0].id; // Assuming only one row is inserted
+}
 
-    // Update the lottery table with the new winners and log the update
-    const { rows: lottery_first } = await sql`
+// Helper function to update lottery with winners
+async function updateLotteryWithWinner(winnersId: any) {
+    const { rows } = await sql`
         UPDATE lottery
-        SET winners_id = ${winners_rows[0].id}
+        SET winners_id = ${winnersId}
         WHERE forecast_id is not null AND winners_id is null
         RETURNING *;
     `;
-    console.log('Lottery successfully updated', lottery_first);
+    if (rows.length === 0) throw new Error('No lottery was updated.');
+    return rows;
+}
 
-    // Generate new forecast numbers for the next lottery
+// Generate new forecast and insert into database
+async function insertForecast() {
     const forecasts = getScoredNumbers(Array.from({ length: 90 }, (_, i) => i + 1), 100)
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
-    
-    // Insert the new forecast into the database and log the action
-    const { rows: forecasts_rows } = await sql`
-        INSERT INTO forecasts (
-            num_1, score_1,
-            num_2, score_2,
-            num_3, score_3,
-            num_4, score_4,
-            num_5, score_5,
-            num_6, score_6,
-            num_7, score_7,
-            num_8, score_8,
-            num_9, score_9,
-            num_10, score_10
-        ) VALUES (
-            ${forecasts[0].number}, ${forecasts[0].score},
-            ${forecasts[1].number}, ${forecasts[1].score},
-            ${forecasts[2].number}, ${forecasts[2].score},
-            ${forecasts[3].number}, ${forecasts[3].score},
-            ${forecasts[4].number}, ${forecasts[4].score},
-            ${forecasts[5].number}, ${forecasts[5].score},
-            ${forecasts[6].number}, ${forecasts[6].score},
-            ${forecasts[7].number}, ${forecasts[7].score},
-            ${forecasts[8].number}, ${forecasts[8].score},
-            ${forecasts[9].number}, ${forecasts[9].score}
-        ) RETURNING id;
-    `;
-    console.log('Forecast successfully inserted', forecasts_rows);
 
-    // Update the lottery table with the new forecast and log the action
-    const { rows: lottery_second } = await sql`
+    const { rows } = await sql`
+    INSERT INTO forecasts ( 
+        num_1, score_1, num_2, score_2, num_3, score_3, num_4, score_4, num_5, score_5, num_6, score_6, num_7, score_7, num_8, score_8, num_9, score_9, num_10, score_10
+    ) VALUES (
+        ${forecasts[0].number}, ${forecasts[0].score}, ${forecasts[1].number}, ${forecasts[1].score}, ${forecasts[2].number}, ${forecasts[2].score}, ${forecasts[3].number}, ${forecasts[3].score}, ${forecasts[4].number}, ${forecasts[4].score}, ${forecasts[5].number}, ${forecasts[5].score}, ${forecasts[6].number}, ${forecasts[6].score}, ${forecasts[7].number}, ${forecasts[7].score}, ${forecasts[8].number}, ${forecasts[8].score}, ${forecasts[9].number}, ${forecasts[9].score}
+    ) RETURNING id;`;
+    
+    if (rows.length === 0) throw new Error('No forecast was inserted.');
+    return rows[0].id;
+}
+
+// Helper function to update lottery with new forecast
+async function updateLotteryWithForecast(forecastId: any) {
+    const { rows } = await sql`
         UPDATE lottery
-        SET forecast_id = ${forecasts_rows[0].id}
+        SET forecast_id = ${forecastId}
         WHERE id = (
             SELECT id FROM lottery
             WHERE forecast_id IS NULL AND winners_id IS NULL
@@ -150,10 +119,48 @@ async function handleSubmit(formData: FormData) {
         )
         RETURNING *;
     `;
-    console.log('Lottery successfully updated', lottery_second);
+    if (rows.length === 0) throw new Error('No lottery was updated with new forecast.');
+    return rows;
+}
 
-    // Trigger a revalidation in Next.js to reflect the updated data
-    revalidatePath('/');
+// Main function handling form submission
+async function handleSubmit(formData: FormData) {
+    "use server"
+
+    // Verify PIN before proceeding
+    if (formData.get('pin') !== process.env.PIN) {
+        console.error('Invalid PIN');
+        return;
+    }
+
+    try {
+        const winners = {
+            i: String(formData.get('i')),
+            ii: String(formData.get('ii')),
+            iii: String(formData.get('iii')),
+            iv: String(formData.get('iv')),
+            v: String(formData.get('v')),
+            vi: String(formData.get('vi')),
+            j: String(formData.get('j')),
+            ss: String(formData.get('ss')),
+        };
+
+        // Insert winners and update lottery with the new winners
+        const winnersId = await insertWinners(winners);
+        const updatedLottery = await updateLotteryWithWinner(winnersId);
+        console.log('Lottery updated with new winners:', updatedLottery);
+
+        // Insert new forecast and update lottery
+        const forecastId = await insertForecast();
+        const updatedLotteryWithForecast = await updateLotteryWithForecast(forecastId);
+        console.log('Lottery updated with new forecast:', updatedLotteryWithForecast);
+
+        // Revalidate cache after updates
+        revalidatePath('/');
+
+    } catch (error) {
+        console.error('Failed to process lottery data:', error);
+    }
 }
 
 // Form component for entering the lottery winners
