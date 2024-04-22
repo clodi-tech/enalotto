@@ -1,18 +1,23 @@
+// Import necessary modules and styles
 import { JetBrains_Mono } from 'next/font/google';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 
+// Set up a custom font using JetBrains Mono
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ['300'] });
 
+// Access a sensitive PIN from environment variables
 const pin = process.env.PIN;
 
+// Function to generate an array of scored numbers for the lottery
 function getScoredNumbers(numbers: number[], maxScore: number) {
     return numbers.map(number => ({
       number,
-      score: Math.floor(Math.random() * maxScore),
+      score: Math.floor(Math.random() * maxScore), 
     }));
-  }
+}
 
+// Component to display the next lottery draw information
 function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: any, indices: number[] }) {
     return (
         <div className='flex flex-col justify-center items-center gap-2 border border-slate-700 rounded-lg py-4'>
@@ -32,8 +37,9 @@ function NextLottery({ lottery, forecast, indices}: { lottery: any, forecast: an
     )
 }
 
+// Component to display the last lottery draw including the winners
 function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, forecast: any, winners: any, indices: number[] }) {
-    //winners = { id: 1, i: 12, ii: 23, iii: 30, iv: 44, v: 56, vi: 78, j: 88, ss: 90 }
+    // Creates a set of winner numbers for easy comparison
     const winnerNumbers = new Set([
         winners.i, winners.ii, winners.iii, winners.iv,
         winners.v, winners.vi, winners.j, winners.ss
@@ -60,12 +66,14 @@ function LastLottery({ lottery, forecast, winners, indices}: { lottery: any, for
     )
 }
 
+// Function to handle the submission of winners form data
 async function handleSubmit(formData: FormData) {
     "use server"
 
+    // Verify that the submitted PIN matches the expected one
     if(formData.get('pin') !== pin) return;
-    
-    // get the form data
+
+    // Get the form data
     const winners = {
         i: String(formData.get('i')),
         ii: String(formData.get('ii')),
@@ -76,8 +84,8 @@ async function handleSubmit(formData: FormData) {
         j: String(formData.get('j')),
         ss: String(formData.get('ss')),
     };
-
-    // insert the winners into the database
+    
+    // Insert the winners into the database and log the insertion
     const { rows: winners_rows } = await sql`
         INSERT INTO winners (
             i, ii, iii, iv, v, vi, j, ss
@@ -88,7 +96,7 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Winners successfully inserted', winners_rows);
 
-    // update the lottery with the winners
+    // Update the lottery table with the new winners and log the update
     const { rows: lottery_first } = await sql`
         UPDATE lottery
         SET winners_id = ${winners_rows[0].id}
@@ -97,12 +105,12 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Lottery successfully updated', lottery_first);
 
-    // generate new forecast
+    // Generate new forecast numbers for the next lottery
     const forecasts = getScoredNumbers(Array.from({ length: 90 }, (_, i) => i + 1), 100)
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
     
-    // insert the forecast into the database
+    // Insert the new forecast into the database and log the action
     const { rows: forecasts_rows } = await sql`
         INSERT INTO forecasts (
             num_1, score_1,
@@ -130,7 +138,7 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Forecast successfully inserted', forecasts_rows);
 
-    // update the lottery with the forecast
+    // Update the lottery table with the new forecast and log the action
     const { rows: lottery_second } = await sql`
         UPDATE lottery
         SET forecast_id = ${forecasts_rows[0].id}
@@ -144,9 +152,11 @@ async function handleSubmit(formData: FormData) {
     `;
     console.log('Lottery successfully updated', lottery_second);
 
+    // Trigger a revalidation in Next.js to reflect the updated data
     revalidatePath('/');
 }
 
+// Form component for entering the lottery winners
 function FormWinners(){
     return (
         <div className={mono.className}>
@@ -170,17 +180,17 @@ function FormWinners(){
     )
 }
 
+// Main page function to render the lottery components
 export default async function Page() {
-    // get the next lottery and the forecast
+    // Query the database for the next and last lottery details
     const { rows: [next] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is null`;
     const { rows: [forecast_next] } = await sql`SELECT * FROM forecasts WHERE id = ${next.forecast_id}`;
 
-    // get the last lottery and the winners
     const { rows: [last] } = await sql`SELECT * FROM lottery WHERE forecast_id is not null AND winners_id is not null ORDER BY id DESC LIMIT 1`;
     const { rows: [winners] } = await sql`SELECT * FROM winners WHERE id = ${last.winners_id}`;
     const { rows: [forecast_last] } = await sql`SELECT * FROM forecasts WHERE id = ${last.forecast_id}`;
 
-    // setup the indices for the forecast pairs
+    // Setup indices for displaying forecast pairs
     const indices = Array.from({ length: 10 }, (_, i) => i + 1);
 
     return(
